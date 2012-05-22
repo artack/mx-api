@@ -50,8 +50,8 @@ class Curl extends Transport implements TransportInterface
         {
             var_dump($result);
             var_dump($info);
-//            var_dump($error);
-//            var_dump($errno);
+            var_dump($error);
+            var_dump($errno);
         }
 //        die (var_dump($result));
 
