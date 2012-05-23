@@ -33,6 +33,11 @@ class Curl extends Transport implements TransportInterface
             curl_setopt($cSession, CURLOPT_POST, 1);
         }
 
+        if ($this->debug)
+        {
+            var_dump($this->formattedBody);
+        }
+
         curl_setopt($cSession, CURLOPT_CUSTOMREQUEST, $this->method);
         curl_setopt($cSession, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($cSession, CURLOPT_HTTPHEADER, $this->getHeaderForHTTP());
