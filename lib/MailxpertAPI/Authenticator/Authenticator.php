@@ -11,22 +11,20 @@ abstract class Authenticator
         $data[] = $nonce;
 
         $hmac = base64_encode(hash_hmac($hAlgo, $this->computeHashBody($data), $secret));
+
         return sprintf('ApiAccountToken KEY="%s", HMAC="%s", NONCE="%s"', $key, $hmac, $nonce);
     }
 
     protected function computeHashBody(array $data)
     {
         $hBody = '';
-        foreach ($data as $d)
-        {
-            if (null !== $d)
-            {
+        foreach ($data as $d) {
+            if (null !== $d) {
                 $hBody .= $d;
             }
         }
 
-        if ($this->debug)
-        {
+        if ($this->debug) {
             var_dump("hash-body", $hBody);
         }
 

@@ -21,8 +21,7 @@ class MailxpertAPI
         $this->body = count($args) ? array_shift($args) : $this->body;
 
         //merge settings with possible settings in body, body settings have priority
-        if(count($this->settings))
-        {
+        if (count($this->settings)) {
             $this->body = array_merge(array('settings' => $this->settings), $this->body);
         }
 
@@ -37,9 +36,9 @@ class MailxpertAPI
         $this->parent   = null;
         $this->body     = array();
         $this->settings = null;
+
         return $this;
     }
-
 
     /**
      * INTERNALS
@@ -48,25 +47,21 @@ class MailxpertAPI
     {
         $path = '';
 
-        if ($this->parent)
-        {
+        if ($this->parent) {
             $path .= '/' . $this->parent . '/' . $parentId;
         }
 
         $path .= '/'.  $this->entity;
 
-        if ($id)
-        {
+        if ($id) {
             $path .= '/'.$id;
         }
 
-        if(!$this->transport->isKnownMethod($action))
-        {
+        if (!$this->transport->isKnownMethod($action)) {
             $path .= '/'.$action;
         }
 
-        if(strtoupper($action) === 'GET' && $this->body)
-        {
+        if (strtoupper($action) === 'GET' && $this->body) {
             $path .= '?' . http_build_query($this->body);
         }
 
@@ -79,40 +74,44 @@ class MailxpertAPI
     public function setEntity($entity)
     {
         $this->entity = $entity;
+
         return $this;
     }
 
     public function setParent($parent)
     {
         $this->parent = $parent;
+
         return $this;
     }
 
     public function setBody($body)
     {
         $this->body = $body;
+
         return $this;
     }
 
     public function setSetting($k, $v)
     {
         $this->settings[$k] = $v;
+
         return $this;
     }
 
     public function setSettings(array $settings)
     {
         $this->settings = $settings;
+
         return $this;
     }
 
     public function setTransport(TransportInterface $transport)
     {
         $this->transport = $transport;
+
         return $this;
     }
-
-
 
     /**
      * GETTERS
@@ -151,6 +150,5 @@ class MailxpertAPI
     {
         $this->debug = (boolean)$debug;
     }
-
 
 }

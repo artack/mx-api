@@ -47,7 +47,7 @@ abstract class Transport
     protected $randomizer = null;
     protected $debug = false;
 
-    function __construct()
+    public function __construct()
     {
         $this->dateTimeZone = new \DateTimeZone($this->dateTimeZoneDefault);
     }
@@ -61,18 +61,14 @@ abstract class Transport
 
         $this->method = strtoupper($action);
 
-        if (!$this->isKnownMethod($this->method))
-        {
+        if (!$this->isKnownMethod($this->method)) {
             $this->method = "POST";
         }
 
-        if($this->method != 'GET')
-        {
+        if ($this->method != 'GET') {
             $this->formattedBody = $this->parser->encode($body);
             $this->addHeader('Content-Length', strlen($this->formattedBody));
-        }
-        else
-        {
+        } else {
             $this->formattedBody = null;
         }
 
@@ -119,10 +115,10 @@ abstract class Transport
     public function getHeaderForHTTP()
     {
         $headers = array();
-        foreach ($this->headers as $key => $value)
-        {
+        foreach ($this->headers as $key => $value) {
             $headers[] = $key.': '.$value;
         }
+
         return $headers;
     }
 
@@ -135,7 +131,6 @@ abstract class Transport
     {
         $this->headers[$key] = $value;
     }
-
 
     /*
      * SETTERS
@@ -200,7 +195,6 @@ abstract class Transport
         $this->parser = $parser;
         $this->format = strtolower(substr(strrchr(get_class($this->parser), '\\'), 1));
     }
-
 
     /*
      * GETTERS
@@ -269,6 +263,5 @@ abstract class Transport
     {
         return $this->debug;
     }
-
 
 }

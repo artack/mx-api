@@ -7,11 +7,10 @@ class JSON implements ParserInterface
 
     public function encode($data)
     {
-        if (null === $data)
-        {
+        if (null === $data) {
             return '';
         }
-        
+
         return json_encode($data);
     }
 

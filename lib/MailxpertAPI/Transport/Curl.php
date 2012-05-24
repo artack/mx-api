@@ -5,7 +5,7 @@ namespace MailxpertAPI\Transport;
 class Curl extends Transport implements TransportInterface
 {
 
-    function __construct()
+    public function __construct()
     {
 
         parent::__construct();
@@ -20,21 +20,18 @@ class Curl extends Transport implements TransportInterface
     {
         parent::executeRequest($path, $action, $body);
 
-        if ($this->debug)
-        {
+        if ($this->debug) {
             var_dump($this->method, $this->request, $this->headers, $body);
         }
 
         $cSession = curl_init($this->request);
 
-        if($this->method != 'GET')
-        {
+        if ($this->method != 'GET') {
             curl_setopt ($cSession, CURLOPT_POSTFIELDS, $this->formattedBody);
             curl_setopt($cSession, CURLOPT_POST, 1);
         }
 
-        if ($this->debug)
-        {
+        if ($this->debug) {
             var_dump($this->formattedBody);
         }
 
@@ -51,8 +48,7 @@ class Curl extends Transport implements TransportInterface
         $errno  = curl_errno($cSession);
         curl_close($cSession);
 
-        if ($this->debug)
-        {
+        if ($this->debug) {
             var_dump($result);
             var_dump($info);
             var_dump($error);
