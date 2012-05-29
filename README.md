@@ -1,1 +1,1 @@
-placeholder
+Documentation is available on the doc directory
