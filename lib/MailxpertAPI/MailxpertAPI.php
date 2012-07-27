@@ -1,9 +1,5 @@
 <?php
 
-namespace MailxpertAPI;
-
-use MailxpertAPI\Transport\TransportInterface;
-
 class MailxpertAPI
 {
 

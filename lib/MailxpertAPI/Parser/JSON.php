@@ -1,7 +1,5 @@
 <?php
 
-namespace MailxpertAPI\Parser;
-
 class JSON implements ParserInterface
 {
 

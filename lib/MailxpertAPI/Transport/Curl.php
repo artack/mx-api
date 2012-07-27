@@ -1,7 +1,5 @@
 <?php
 
-namespace MailxpertAPI\Transport;
-
 class Curl extends Transport implements TransportInterface
 {
 

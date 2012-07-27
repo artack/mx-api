@@ -1,7 +1,5 @@
 <?php
 
-namespace MailxpertAPI\Authenticator;
-
 abstract class Authenticator
 {
     protected $debug = false;

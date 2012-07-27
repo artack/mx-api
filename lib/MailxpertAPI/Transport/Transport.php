@@ -1,11 +1,5 @@
 <?php
 
-namespace MailxpertAPI\Transport;
-
-use MailxpertAPI\Authenticator\AuthenticatorInterface;
-use MailxpertAPI\Parser\ParserInterface;
-use MailxpertAPI\Randomizer\RandomizerInterface;
-
 abstract class Transport
 {
 
