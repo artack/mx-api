@@ -1,5 +1,7 @@
 <?php
 
+namespace MailxpertAPI\Authenticator;
+
 class HeaderHMAC extends Authenticator implements AuthenticatorInterface
 {
 

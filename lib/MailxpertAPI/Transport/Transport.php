@@ -1,5 +1,11 @@
 <?php
 
+namespace MailxpertAPI\Transport;
+
+use MailxpertAPI\Authenticator\AuthenticatorInterface;
+use MailxpertAPI\Parser\ParserInterface;
+use MailxpertAPI\Randomizer\RandomizerInterface;
+
 abstract class Transport
 {
 
@@ -187,7 +193,7 @@ abstract class Transport
     public function setParser(ParserInterface $parser)
     {
         $this->parser = $parser;
-        $this->format = strtolower(get_class($this->parser));
+        $this->format = strtolower(substr(strrchr(get_class($this->parser), '\\'), 1));
     }
 
     /*

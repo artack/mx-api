@@ -1,5 +1,7 @@
 <?php
 
+namespace MailxpertAPI\Randomizer;
+
 interface RandomizerInterface
 {
 
