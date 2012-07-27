@@ -1,7 +1,5 @@
 <?php
 
-namespace MailxpertAPI\Parser;
-
 class XML implements ParserInterface
 {
 

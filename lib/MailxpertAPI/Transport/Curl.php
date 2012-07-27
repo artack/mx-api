@@ -1,19 +1,15 @@
 <?php
 
-namespace MailxpertAPI\Transport;
-
 class Curl extends Transport implements TransportInterface
 {
 
     public function __construct()
     {
-
         parent::__construct();
 
         if (!function_exists('curl_init')) {
             throw new Exception('CURL module not available!');
         }
-
     }
 
     public function executeRequest($path, $action, $body)

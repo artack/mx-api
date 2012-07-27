@@ -1,7 +1,5 @@
 <?php
 
-namespace MailxpertAPI\Authenticator;
-
 interface AuthenticatorInterface
 {
 
