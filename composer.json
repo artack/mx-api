@@ -1,7 +1,9 @@
 {
     "name": "artack/mx-api",
     "type": "library",
+    "keywords": ["api"],
     "homepage": "http://www.artack.ch",
+    "license": "MIT",
     "authors": [
         {
             "name": "Patrick Landolt",
@@ -9,8 +11,16 @@
             "homepage": "http://www.artack.ch"
         }
     ],
+    
     "minimum-stability": "dev",
+    
     "require": {
         "php": ">=5.3.2"
-    }
+    },
+
+    "autoload": {
+        "psr-0": { "ARTACK\\MXAPI": "" }
+    },
+
+    "target-dir": "ARTACK/MXAPI"
 }
