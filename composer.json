@@ -1,0 +1,16 @@
+{
+    "name": "artack/mailxpertapi",
+    "type": "library",
+    "homepage": "http://www.artack.ch",
+    "authors": [
+        {
+            "name": "Patrick Landolt",
+            "email": "patrick.landolt@artack.ch",
+            "homepage": "http://www.artack.ch"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.2"
+    }
+}
