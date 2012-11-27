@@ -2,6 +2,9 @@
 
 namespace MailxpertAPI\Authenticator;
 
+/**
+ * @author Patrick Landolt <patrick.landolt@artack.ch>
+ */
 abstract class Authenticator
 {
     protected $debug = false;
