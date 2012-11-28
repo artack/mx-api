@@ -1,6 +1,6 @@
 <?php
 
-namespace MailxpertAPI\Randomizer;
+namespace ARTACK\MXAPI\Randomizer;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>

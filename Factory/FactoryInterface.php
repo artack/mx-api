@@ -1,17 +1,19 @@
 <?php
 
-namespace MailxpertAPI\Factory;
+namespace ARTACK\MXAPI\Factory;
 
-use MailxpertAPI\Authenticator\AuthenticatorInterface;
-use MailxpertAPI\Randomizer\RandomizerInterface;
+use ARTACK\MXAPI\Authenticator\AuthenticatorInterface;
+use ARTACK\MXAPI\Randomizer\RandomizerInterface;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
  */
 interface FactoryInterface 
 {
-    
-    function buildAuthenticator($type = AuthenticatorInterface::AUTHENTICATOR_DEFAULT_TYPE);
-    function buildRandomizer($type = RandomizerInterface::RANDOMIZER_DEFAULT_TYPE);
+
+    static public function buildDateHeader();
+    static public function buildAccountTokenHeader($type = AccountTokenHeaderInterface::ACCOUNTTOKENHEADER_DEFAULT_TYPE);
+    static public function buildAuthenticator($type = AuthenticatorInterface::AUTHENTICATOR_DEFAULT_TYPE);
+    static public function buildRandomizer($type = RandomizerInterface::RANDOMIZER_DEFAULT_TYPE);
     
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace MailxpertAPI\Header;
+namespace ARTACK\MXAPI\Header;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
  */
-interface HeaderInterface 
+interface HeaderInterface
 {
     
-    public function getApiAuthTokenHeader();
-    
+    public function getHeader();
+
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace MailxpertAPI\Authenticator;
+namespace ARTACK\MXAPI\Authenticator;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
@@ -8,6 +8,10 @@ namespace MailxpertAPI\Authenticator;
 interface AuthenticatorInterface 
 {
     
-    public function computeDataHash();
+    const AUTHENTICATOR_DEFAULT_TYPE = 'Hmac';
+    
+    public function setData($data);
+    public function setKey($key);
+    public function getHash();
     
 }
