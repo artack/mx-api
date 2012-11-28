@@ -2,8 +2,7 @@
 
 namespace Artack\MxApi;
 
-use Artack\MxApi\Factory\Factory;
-use Artack\MxApi\Factory\FactoryInterface;
+use Artack\MxApi\Request\Call;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
@@ -12,93 +11,52 @@ class ArtackMxApi
 {
 
     /**
-     * @var \Artack\MxApi\Configuration
+     * @var Dispatcher
      */
-    protected $configuration;
-
+    protected $dispatcher;
+    
     /**
-     * @var \Artack\MxApi\Factory\FactoryInterface
+     * @var Call
      */
-    protected $factory;
-    protected $browser;
-    protected $coder;
-
-    /**
-     * @var \Artack\MxApi\Authenticator\AuthenticatorInterface
-     */
-    protected $authenticator;
-
-    /**
-     * @var \Artack\MxApi\Randomizer\RandomizerInterface
-     */
-    protected $randomizer;
-
-    /**
-     * @var \Artack\MxApi\Header\AccountTokenHeaderInterface
-     */
-    protected $accountTokenHeader;
-
-    /**
-     * @var \Artack\MxApi\Header\DateHeaderInterface
-     */
-    protected $dateHeader;
-
-    protected $nonce;
-
-    public function __construct(Configuration $configuration, FactoryInterface $factory = null)
+    protected $call;
+    
+    public function __construct(Dispatcher $dispatcher, Call $call)
     {
-        $this->configuration = $configuration;
-        $this->factory = $factory ?: new Factory();
-
-        $this->build();
-        $this->init();
+        $this->dispatcher = $dispatcher;
+        $this->call = $call;
     }
-
-    protected function build()
+    
+    public function setPath($path, $ids)
     {
-        $this->randomizer = Factory::buildRandomizer();
-        $this->authenticator = Factory::buildAuthenticator();
-        $this->accountTokenHeader = Factory::buildAccountTokenHeader();
-        $this->dateHeader = Factory::buildDateHeader();
+        $this->call->getUrl()->setPath($path, $ids);
+        
+        return $this;
     }
-
-    protected function init()
+    
+    public function setBody($body)
     {
-        $this->nonce = $this->randomizer->getRandom(32);
-
-        $this->authenticator->setData('anydata');
-        $this->authenticator->setKey($this->configuration->getApiSecret());
-
-        $hmac = $this->authenticator->getHash();
-
-        $this->accountTokenHeader->setCustomerKey($this->configuration->getCustomerKey());
-        $this->accountTokenHeader->setApiKey($this->configuration->getApiKey());
-        $this->accountTokenHeader->setHmac($hmac);
-        $this->accountTokenHeader->setNonce($this->nonce);
+        $this->call->setBody($body);
+        
+        return $this;
     }
-
-    /**
-     * @return string
-     */
-    public function getRandom($length)
+    
+    public function get()
     {
-        return $this->randomizer->getRandom($length);
+        $this->call->setMethod('GET');
+        
+        return $this->dispatch();
     }
-
-    /**
-     * @return string
-     */
-    public function getDateHeader()
+    
+    public function post()
     {
-        return $this->dateHeader->getHeader();
+        $this->call->setMethod('POST');
+        
+        return $this->dispatch();
     }
-
-    /**
-     * @return string
-     */
-    public function getAccountTokenHeader()
+    
+    protected function dispatch()
     {
-        return $this->accountTokenHeader->getHeader();
+        $this->dispatcher->dispatch($this->call);
     }
-
+    
 }

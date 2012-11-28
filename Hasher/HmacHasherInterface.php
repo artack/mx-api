@@ -1,13 +1,13 @@
 <?php
 
-namespace Artack\MxApi\Authenticator;
+namespace Artack\MxApi\Hasher;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
  */
-interface HmacAuthenticatorInterface extends AuthenticatorInterface
+interface HmacHasherInterface extends HasherInterface
 {
 
     public function setAlgorithm($algorithm);
-
+    
 }

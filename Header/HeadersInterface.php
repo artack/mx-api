@@ -5,10 +5,9 @@ namespace Artack\MxApi\Header;
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
  */
-interface HeaderInterface
+interface HeadersInterface
 {
 
-    public function getName();
-    public function getHeader();
+    public function getHeaders();
 
 }

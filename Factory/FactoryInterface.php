@@ -12,7 +12,7 @@ interface FactoryInterface
 {
 
     public static function buildDateHeader();
-    public static function buildAccountTokenHeader($type = AccountTokenHeaderInterface::ACCOUNTTOKENHEADER_DEFAULT_TYPE);
+    public static function buildXAuthHeader();
     public static function buildAuthenticator($type = AuthenticatorInterface::AUTHENTICATOR_DEFAULT_TYPE);
     public static function buildRandomizer($type = RandomizerInterface::RANDOMIZER_DEFAULT_TYPE);
 

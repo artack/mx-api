@@ -21,7 +21,7 @@ class Factory implements FactoryInterface
      */
     public static function buildDateHeader()
     {
-        $buildClass = 'Header\\DateHeader';
+        $buildClass = 'Header\\Date\\DateHeader';
 
         return static::load($buildClass);
     }
@@ -30,9 +30,9 @@ class Factory implements FactoryInterface
      * @param  string                      $type
      * @return AccountTokenHeaderInterface
      */
-    public static function buildAccountTokenHeader($type = AccountTokenHeaderInterface::ACCOUNTTOKENHEADER_DEFAULT_TYPE)
+    public static function buildXAuthHeader()
     {
-        $buildClass = 'Header\\' . $type . 'Header';
+        $buildClass = 'Header\\XAuth\\XAuthHeader';
 
         return static::load($buildClass);
     }
