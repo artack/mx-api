@@ -1,9 +1,9 @@
 <?php
 
-namespace ARTACK\MXAPI\Factory;
+namespace Artack\MxApi\Factory;
 
-use ARTACK\MXAPI\Authenticator\AuthenticatorInterface;
-use ARTACK\MXAPI\Randomizer\RandomizerInterface;
+use Artack\MxApi\Authenticator\AuthenticatorInterface;
+use Artack\MxApi\Randomizer\RandomizerInterface;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>

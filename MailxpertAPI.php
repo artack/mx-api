@@ -1,9 +1,9 @@
 <?php
 
-namespace ARTACK\MXAPI;
+namespace Artack\MxApi;
 
-use ARTACK\MXAPI\Factory\Factory;
-use ARTACK\MXAPI\Factory\FactoryInterface;
+use Artack\MxApi\Factory\Factory;
+use Artack\MxApi\Factory\FactoryInterface;
 use Exception;
 
 /**

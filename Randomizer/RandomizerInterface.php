@@ -1,6 +1,6 @@
 <?php
 
-namespace ARTACK\MXAPI\Randomizer;
+namespace Artack\MxApi\Randomizer;
 
 interface RandomizerInterface
 {

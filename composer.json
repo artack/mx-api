@@ -1,7 +1,7 @@
 {
     "name": "artack/mx-api",
     "type": "library",
-    "keywords": ["api"],
+    "keywords": ["api", "library", "lib", "ARTACK"],
     "homepage": "http://www.artack.ch",
     "license": "MIT",
     "authors": [
@@ -21,8 +21,8 @@
     },
 
     "autoload": {
-        "psr-0": { "ARTACK\\MXAPI": "" }
+        "psr-0": { "Artack\\MxApi": "" }
     },
 
-    "target-dir": "ARTACK/MXAPI"
+    "target-dir": "Artack/MxApi"
 }

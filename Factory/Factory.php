@@ -1,11 +1,11 @@
 <?php
 
-namespace ARTACK\MXAPI\Factory;
+namespace Artack\MxApi\Factory;
 
-use ARTACK\MXAPI\Authenticator\AuthenticatorInterface;
-use ARTACK\MXAPI\Header\AccountTokenHeaderInterface;
-use ARTACK\MXAPI\Header\DateHeaderInterface;
-use ARTACK\MXAPI\Randomizer\RandomizerInterface;
+use Artack\MxApi\Authenticator\AuthenticatorInterface;
+use Artack\MxApi\Header\AccountTokenHeaderInterface;
+use Artack\MxApi\Header\DateHeaderInterface;
+use Artack\MxApi\Randomizer\RandomizerInterface;
 use Exception;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace ARTACK\MXAPI\Authenticator;
+namespace Artack\MxApi\Authenticator;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
