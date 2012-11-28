@@ -9,7 +9,7 @@ use DateTime;
  */
 interface DateHeaderInterface extends HeaderInterface
 {
-    
+
     public function setDate(DateTime $date);
-    
+
 }

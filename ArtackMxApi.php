@@ -4,58 +4,56 @@ namespace Artack\MxApi;
 
 use Artack\MxApi\Factory\Factory;
 use Artack\MxApi\Factory\FactoryInterface;
-use Exception;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
  */
-class MailxpertAPI
+class ArtackMxApi
 {
 
-    
     /**
-     * @var \ARTACK\MXAPI\Factory\FactoryInterface
+     * @var \Artack\MxApi\Configuration
+     */
+    protected $configuration;
+
+    /**
+     * @var \Artack\MxApi\Factory\FactoryInterface
      */
     protected $factory;
     protected $browser;
     protected $coder;
-    
+
     /**
-     * @var \ARTACK\MXAPI\Authenticator\AuthenticatorInterface
+     * @var \Artack\MxApi\Authenticator\AuthenticatorInterface
      */
     protected $authenticator;
-    
+
     /**
-     * @var \ARTACK\MXAPI\Randomizer\RandomizerInterface
+     * @var \Artack\MxApi\Randomizer\RandomizerInterface
      */
     protected $randomizer;
-    
+
     /**
-     * @var \ARTACK\MXAPI\Header\AccountTokenHeaderInterface
+     * @var \Artack\MxApi\Header\AccountTokenHeaderInterface
      */
     protected $accountTokenHeader;
-    
+
     /**
-     * @var \ARTACK\MXAPI\Header\DateHeaderInterface
+     * @var \Artack\MxApi\Header\DateHeaderInterface
      */
     protected $dateHeader;
-    
+
     protected $nonce;
-    protected $customerKey = null;
-    protected $apiKey = null;
-    protected $secret = null;
-    
-    function __construct($customerKey, $apiKey, $secret, FactoryInterface $factory = null) {
-    
-        $this->customerKey = $customerKey;
-        $this->apiKey = $apiKey;
-        $this->secret = $secret;
+
+    public function __construct(Configuration $configuration, FactoryInterface $factory = null)
+    {
+        $this->configuration = $configuration;
         $this->factory = $factory ?: new Factory();
-        
+
         $this->build();
         $this->init();
     }
-    
+
     protected function build()
     {
         $this->randomizer = Factory::buildRandomizer();
@@ -63,54 +61,22 @@ class MailxpertAPI
         $this->accountTokenHeader = Factory::buildAccountTokenHeader();
         $this->dateHeader = Factory::buildDateHeader();
     }
-    
+
     protected function init()
     {
         $this->nonce = $this->randomizer->getRandom(32);
-        
+
         $this->authenticator->setData('anydata');
-        $this->authenticator->setKey($this->secret);
-        
+        $this->authenticator->setKey($this->configuration->getApiSecret());
+
         $hmac = $this->authenticator->getHash();
-        
-        $this->accountTokenHeader->setCustomerKey($this->customerKey);
-        $this->accountTokenHeader->setApiKey($this->apiKey);
+
+        $this->accountTokenHeader->setCustomerKey($this->configuration->getCustomerKey());
+        $this->accountTokenHeader->setApiKey($this->configuration->getApiKey());
         $this->accountTokenHeader->setHmac($hmac);
         $this->accountTokenHeader->setNonce($this->nonce);
     }
-    
-    /**
-     * @return string
-     */
-    public function getCustomerKey()
-    {
-        return $this->customerKey;
-    }
 
-    /**
-     * @param string $customerKey
-     */
-    public function setCustomerKey($customerKey)
-    {
-        $this->customerKey = $customerKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiKey()
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     * @param string $apiKey
-     */
-    public function setApiKey($apiKey)
-    {
-        $this->apiKey = $apiKey;
-    }
-    
     /**
      * @return string
      */
@@ -118,7 +84,7 @@ class MailxpertAPI
     {
         return $this->randomizer->getRandom($length);
     }
-    
+
     /**
      * @return string
      */
@@ -126,7 +92,7 @@ class MailxpertAPI
     {
         return $this->dateHeader->getHeader();
     }
-    
+
     /**
      * @return string
      */
@@ -134,5 +100,5 @@ class MailxpertAPI
     {
         return $this->accountTokenHeader->getHeader();
     }
-    
+
 }

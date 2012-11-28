@@ -13,57 +13,65 @@ use Exception;
  */
 class Factory implements FactoryInterface
 {
-    
+
+    protected static $classNamespace = '\\Artack\MxApi\\';
+
     /**
      * @return DateHeaderInterface
      */
     public static function buildDateHeader()
     {
-        $buildClass = '\\ARTACK\\MXAPI\\Header\\DateHeader';
+        $buildClass = 'Header\\DateHeader';
+
         return static::load($buildClass);
     }
-    
+
     /**
-     * @param string $type
+     * @param  string                      $type
      * @return AccountTokenHeaderInterface
      */
     public static function buildAccountTokenHeader($type = AccountTokenHeaderInterface::ACCOUNTTOKENHEADER_DEFAULT_TYPE)
     {
-        $buildClass = '\\ARTACK\\MXAPI\\Header\\' . $type . 'Header';
+        $buildClass = 'Header\\' . $type . 'Header';
+
         return static::load($buildClass);
     }
 
     /**
-     * @param string $type
+     * @param  string                 $type
      * @return AuthenticatorInterface
      */
-    static public function buildAuthenticator($type = AuthenticatorInterface::AUTHENTICATOR_DEFAULT_TYPE) {
-        $buildClass = '\\ARTACK\\MXAPI\\Authenticator\\' . $type . 'Authenticator';
+    public static function buildAuthenticator($type = AuthenticatorInterface::AUTHENTICATOR_DEFAULT_TYPE)
+    {
+        $buildClass = 'Authenticator\\' . $type . 'Authenticator';
+
         return static::load($buildClass);
     }
 
     /**
-     * @param string $type
+     * @param  string              $type
      * @return RandomizerInterface
      */
-    static public function buildRandomizer($type = RandomizerInterface::RANDOMIZER_DEFAULT_TYPE) {
-        $buildClass = '\\ARTACK\\MXAPI\\Randomizer\\' . $type . 'Randomizer';
+    public static function buildRandomizer($type = RandomizerInterface::RANDOMIZER_DEFAULT_TYPE)
+    {
+        $buildClass = 'Randomizer\\' . $type . 'Randomizer';
+
         return static::load($buildClass);
     }
-    
+
     /**
-     * @param string $buildClass
+     * @param  string    $buildClass
      * @return object
      * @throws Exception
      */
-    static protected function load($buildClass)
+    protected static function load($class)
     {
-        if (!class_exists($buildClass))
-        {
+        $buildClass = static::$classNamespace . $class;
+        if (!class_exists($buildClass)) {
             throw new Exception(sprintf("Class [%s] not found", $buildClass));
         }
-        
+
         return new $buildClass;
     }
-    
+
 }

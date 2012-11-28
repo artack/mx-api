@@ -7,7 +7,7 @@ namespace Artack\MxApi\Header;
  */
 interface HeaderInterface
 {
-    
+
     public function getHeader();
 
 }

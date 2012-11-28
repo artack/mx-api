@@ -7,13 +7,13 @@ namespace Artack\MxApi\Header;
  */
 class ApiAccountTokenHeader implements AccountTokenHeaderInterface
 {
-    
+
     protected $customerKey;
     protected $apiKey;
     protected $hmac;
     protected $nonce;
-    
-    function __construct($customerKey = null, $apiKey = null, $hmac = null, $nonce = null)
+
+    public function __construct($customerKey = null, $apiKey = null, $hmac = null, $nonce = null)
     {
         $this->customerKey = ($customerKey) ?: $customerKey;
         $this->apiKey = ($apiKey) ?: $apiKey;
@@ -45,5 +45,5 @@ class ApiAccountTokenHeader implements AccountTokenHeaderInterface
     {
         return 'ApiAccountToken KEY="'.$this->customerKey.':'.$this->apiKey.'", HMAC="'.$this->hmac.'", NONCE="'.$this->nonce.'"';
     }
-    
+
 }

@@ -7,7 +7,7 @@ namespace Artack\MxApi\Authenticator;
  */
 interface HmacAuthenticatorInterface extends AuthenticatorInterface
 {
-    
+
     public function setAlgorithm($algorithm);
-    
+
 }

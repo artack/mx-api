@@ -7,11 +7,11 @@ namespace Artack\MxApi\Authenticator;
  */
 class HmacAuthenticator implements HmacAuthenticatorInterface
 {
-    
+
     protected $algorithm = "sha256";
     protected $data;
     protected $key;
-    
+
     public function setAlgorithm($algorithm)
     {
         $this->algorithm = $algorithm;
@@ -31,5 +31,5 @@ class HmacAuthenticator implements HmacAuthenticatorInterface
     {
         return hash_hmac($this->algorithm, $this->data, $this->key);
     }
-    
+
 }
