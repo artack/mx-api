@@ -1,6 +1,6 @@
 <?php
 
-namespace Artack\MxApi\Header;
+namespace Artack\MxApi\Headers;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>

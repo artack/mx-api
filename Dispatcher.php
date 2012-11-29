@@ -2,15 +2,18 @@
 
 namespace Artack\MxApi;
 
-use Artack\MxApi\Authenticator\AuthenticatorInterface;
-use Artack\MxApi\Configuration;
 use Artack\MxApi\Hasher\HasherInterface;
-use Artack\MxApi\Header\Accept\AcceptHeader;
-use Artack\MxApi\Header\Date\DateHeader;
-use Artack\MxApi\Header\HeadersInterface;
-use Artack\MxApi\Header\XAuth\XAuthHeader;
+use Artack\MxApi\Header\AcceptHeader;
+use Artack\MxApi\Header\AcceptLanguageHeader;
+use Artack\MxApi\Header\DateHeader;
+use Artack\MxApi\Header\XAuthHeader;
+use Artack\MxApi\Headers\HeadersInterface;
+use Artack\MxApi\Normalizer\NormalizerInterface;
 use Artack\MxApi\Randomizer\RandomizerInterface;
 use Artack\MxApi\Request\Call;
+use Buzz\Client\Curl;
+use Buzz\Message\MessageInterface;
+use Buzz\Message\RequestInterface;
 use DateTime;
 
 /**
@@ -30,9 +33,9 @@ class Dispatcher
     protected $randomizer;
     
     /**
-     * @var AuthenticatorInterface
+     * @var NormalizerInterface
      */
-    protected $authenticator;
+    protected $normalizer;
     
     /**
      * @var HasherInterface
@@ -49,13 +52,31 @@ class Dispatcher
      */
     protected $call;
     
-    public function __construct(Configuration $configuration, RandomizerInterface $randomizer, AuthenticatorInterface $authenticator, HasherInterface $hasher, HeadersInterface $headers)
+    /**
+     * @var RequestInterface
+     */
+    protected $request;
+    
+    /**
+     * @var MessageInterface
+     */
+    protected $response;
+    
+    /**
+     * @var Curl
+     */
+    protected $curl;
+    
+    public function __construct(Configuration $configuration, RandomizerInterface $randomizer, NormalizerInterface $normalizer, HasherInterface $hasher, HeadersInterface $headers, RequestInterface $request, MessageInterface $response, Curl $curl)
     {
         $this->configuration = $configuration;
         $this->randomizer = $randomizer;
-        $this->authenticator = $authenticator;
+        $this->normalizer = $normalizer;
         $this->hasher = $hasher;
         $this->headers = $headers;
+        $this->request = $request;
+        $this->response = $response;
+        $this->curl = $curl;
     }
     
     public function dispatch(Call $call)
@@ -73,19 +94,28 @@ class Dispatcher
         $this->call->setDate(new DateTime());
         $this->call->setNonce($this->randomizer->getRandom(32));
         
-        $serializedBody = $this->authenticator->getSerializedBody($this->call);
+        $this->headers->addHeader(new DateHeader($this->call->getDate()));
+        $this->headers->addHeader(new AcceptHeader($this->call->getPath(".", false), $this->configuration->getFormat(), $this->call->getVersion()));
+        $this->headers->addHeader(new AcceptLanguageHeader($this->call->getLanguage()));
+        
+        $serializedBody = $this->normalizer->normalizeForHasher($this->call, $this->headers);
         $hmac = $this->hasher->getHash($serializedBody, $this->configuration->getApiSecret());
         
         $this->headers->addHeader(new XAuthHeader($this->configuration->getCustomerKey(), $this->configuration->getApiKey(), $hmac, $this->call->getNonce()));
-        $this->headers->addHeader(new DateHeader($this->call->getDate()));
-        $this->headers->addHeader(new AcceptHeader($this->call->getPath(".", false), $this->configuration->getFormat(), $this->call->getVersion()));
-        
-        var_dump($this->call->getRequestUrl());
     }
     
     protected function call()
     {
-        var_dump($this->headers->getHeaders());
+        $this->request->setMethod($this->call->getMethod());
+        $this->request->setHost($this->call->getRequestUri());
+        $this->request->setHeaders($this->headers->getHeaders());
+        
+        $this->curl->setVerifyPeer($this->configuration->getVerifyPeer());
+        $this->curl->send($this->request, $this->response);
+        
+        var_dump($this->request);
+        var_dump($this->response);
+        var_dump($this->curl);
     }
     
     protected function parse()

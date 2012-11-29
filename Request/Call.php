@@ -21,6 +21,7 @@ class Call
     protected $version = null;
     protected $format = null;
     
+    protected $language = null;
     protected $body = null;
     
     protected $date = null;
@@ -29,14 +30,15 @@ class Call
     /**
      * @param Url $url
      */
-    function __construct(Url $url, $format, $version)
+    function __construct(Url $url, $format, $version, $language)
     {
         $this->url = $url;
         $this->format = $format;
         $this->version = $version;
+        $this->language = $language;
     }
 
-    public function getRequestUrl()
+    public function getRequestUri()
     {
         return 'http' . (($this->url->getUseSSL()) ? 's' : '') . '://' . $this->url->getBaseUrl() . '/' . $this->getPath("/", true);
     }
@@ -135,6 +137,16 @@ class Call
     public function setNonce($nonce)
     {
         $this->nonce = $nonce;
+    }
+
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    public function setLanguage($language)
+    {
+        $this->language = $language;
     }
 
 }

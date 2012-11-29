@@ -1,8 +1,7 @@
 <?php
 
-namespace Artack\MxApi\Header\Date;
+namespace Artack\MxApi\Header;
 
-use Artack\MxApi\Header\HeaderInterface;
 use DateTime;
 
 /**

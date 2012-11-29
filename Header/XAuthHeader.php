@@ -1,8 +1,6 @@
 <?php
 
-namespace Artack\MxApi\Header\XAuth;
-
-use Artack\MxApi\Header\HeaderInterface;
+namespace Artack\MxApi\Header;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>

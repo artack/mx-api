@@ -33,6 +33,13 @@ class ArtackMxApi
         return $this;
     }
     
+    public function setLanguage($language)
+    {
+        $this->call->setLanguage($language);
+        
+        return $this;
+    }
+    
     public function setPath($path, $ids)
     {
         $this->call->setPath($path, $ids);
