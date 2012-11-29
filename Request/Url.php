@@ -10,22 +10,21 @@ class Url
     
     protected $baseUrl;
     protected $useSSL;
-    protected $apiVersion;
     
-    protected $path = null;
-    protected $ids = null;
-
-    function __construct($baseUrl, $useSSL, $apiVersion)
+    function __construct($baseUrl, $useSSL)
     {
         $this->baseUrl = $baseUrl;
         $this->useSSL = $useSSL;
-        $this->apiVersion = $apiVersion;
     }
     
-    public function setPath($path, $ids)
+    public function getBaseUrl()
     {
-        $this->path = $path;
-        $this->ids = $ids;
+        return $this->baseUrl;
+    }
+
+    public function getUseSSL()
+    {
+        return $this->useSSL;
     }
 
 }

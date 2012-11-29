@@ -12,7 +12,7 @@ class Authenticator implements AuthenticatorInterface
     
     public function getSerializedBody(Call $call)
     {
-        return 'fakedata';
+        return serialize($call->getBody());
     }
     
 }

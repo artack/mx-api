@@ -26,9 +26,16 @@ class ArtackMxApi
         $this->call = $call;
     }
     
+    public function setVersion($version)
+    {
+        $this->call->setVersion($version);
+        
+        return $this;
+    }
+    
     public function setPath($path, $ids)
     {
-        $this->call->getUrl()->setPath($path, $ids);
+        $this->call->setPath($path, $ids);
         
         return $this;
     }

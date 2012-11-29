@@ -5,12 +5,12 @@ namespace Artack\MxApi;
 use Artack\MxApi\Authenticator\AuthenticatorInterface;
 use Artack\MxApi\Configuration;
 use Artack\MxApi\Hasher\HasherInterface;
+use Artack\MxApi\Header\Accept\AcceptHeader;
 use Artack\MxApi\Header\Date\DateHeader;
 use Artack\MxApi\Header\HeadersInterface;
 use Artack\MxApi\Header\XAuth\XAuthHeader;
 use Artack\MxApi\Randomizer\RandomizerInterface;
 use Artack\MxApi\Request\Call;
-use Artack\MxApi\Request\Url;
 use DateTime;
 
 /**
@@ -44,6 +44,11 @@ class Dispatcher
      */
     protected $headers;
     
+    /**
+     * @var Call
+     */
+    protected $call;
+    
     public function __construct(Configuration $configuration, RandomizerInterface $randomizer, AuthenticatorInterface $authenticator, HasherInterface $hasher, HeadersInterface $headers)
     {
         $this->configuration = $configuration;
@@ -55,27 +60,27 @@ class Dispatcher
     
     public function dispatch(Call $call)
     {
-        $this->prepare($call);
+        $this->call = $call;
+        
+        $this->prepare();
         $this->call();
         
         return $this->parse();
     }
     
-    protected function prepare($call)
+    protected function prepare()
     {
-        // $method, $requestUrl, $format, $body, $date, $nonce
+        $this->call->setDate(new DateTime());
+        $this->call->setNonce($this->randomizer->getRandom(32));
         
-        $date = new DateTime();
-        $nonce = $this->randomizer->getRandom(32);
-        
-//        $call = new Call($data['method'], $this->url->getRequestUrl(), $data['format'], $data['body'], $dateHeader->getHeader(), $nonce);
-        var_dump($call);
-        
-        $serializedBody = $this->authenticator->getSerializedBody($call);
+        $serializedBody = $this->authenticator->getSerializedBody($this->call);
         $hmac = $this->hasher->getHash($serializedBody, $this->configuration->getApiSecret());
         
-        $this->headers->addHeader(new DateHeader($date));
-        $this->headers->addHeader(new XAuthHeader($this->configuration->getCustomerKey(), $this->configuration->getApiKey(), $hmac, $nonce));
+        $this->headers->addHeader(new XAuthHeader($this->configuration->getCustomerKey(), $this->configuration->getApiKey(), $hmac, $this->call->getNonce()));
+        $this->headers->addHeader(new DateHeader($this->call->getDate()));
+        $this->headers->addHeader(new AcceptHeader($this->call->getPath(".", false), $this->configuration->getFormat(), $this->call->getVersion()));
+        
+        var_dump($this->call->getRequestUrl());
     }
     
     protected function call()

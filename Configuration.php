@@ -10,19 +10,16 @@ class Configuration
 
     protected $host;
     protected $useSSL;
-    
-    protected $version;
     protected $format;
-
     protected $customerKey;
     protected $apiKey;
     protected $apiSecret;
+    protected $defaultVersion;
 
-    public function __construct($host, $useSSL, $version, $format, $customerKey, $apiKey, $apiSecret)
+    public function __construct($host, $useSSL, $format, $customerKey, $apiKey, $apiSecret, $defaultVersion)
     {
         $this->host = $host;
         $this->useSSL = $useSSL;
-        $this->version = $version;
         $this->format = $format;
         $this->customerKey = $customerKey;
         $this->apiKey = $apiKey;
@@ -38,12 +35,7 @@ class Configuration
     {
         return $this->useSSL;
     }
-    
-    public function getVersion()
-    {
-        return $this->version;
-    }
-    
+
     public function getFormat()
     {
         return $this->format;
@@ -62,6 +54,11 @@ class Configuration
     public function getApiSecret()
     {
         return $this->apiSecret;
+    }
+
+    public function getDefaultVersion()
+    {
+        return $this->defaultVersion;
     }
 
 }

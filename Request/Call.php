@@ -2,6 +2,8 @@
 
 namespace Artack\MxApi\Request;
 
+use Artack\MxApi\Request\Url;
+
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
  */
@@ -14,19 +16,39 @@ class Call
     protected $url = null;
     
     protected $method = null;
+    protected $path = null;
+    protected $ids = null;
+    protected $version = null;
     protected $format = null;
+    
     protected $body = null;
+    
     protected $date = null;
     protected $nonce = null;
     
-    function __construct(Url $url)
+    /**
+     * @param Url $url
+     */
+    function __construct(Url $url, $format, $version)
     {
         $this->url = $url;
+        $this->format = $format;
+        $this->version = $version;
     }
 
     public function getRequestUrl()
     {
-        return 'http' . (($this->useSSL) ? 's' : '') . '://' . $this->baseUrl . '/api-' . $this->apiVersion . '/' . $this->url->entity . (($this->format) ? '.' . $this->format : '');
+        return 'http' . (($this->url->getUseSSL()) ? 's' : '') . '://' . $this->url->getBaseUrl() . '/' . $this->getPath("/", true);
+    }
+    
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    public function setUrl($url)
+    {
+        $this->url = $url;
     }
 
     public function getMethod()
@@ -39,14 +61,40 @@ class Call
         $this->method = $method;
     }
 
-    public function getUrl()
+    public function getPath($separator, $withIds)
     {
-        return $this->url;
+        $newPath = "";
+        
+        if ($withIds) {
+            $pathCount = count($this->path);
+            for ($i=0; $i<$pathCount; $i++) {
+                $newPath .= $this->path[$i] . $separator . ((isset($this->ids[$i])) ? $this->ids[$i] : '') . $separator;
+            }
+            
+            return rtrim($newPath, '/');
+        } else {
+            return implode($separator, $this->path);
+        }
     }
 
-    public function setUrl($url)
+    /**
+     * @param string $path
+     * @param array $ids
+     */
+    public function setPath($path, array $ids)
     {
-        $this->url = $url;
+        $this->path = explode("/", strtolower($path));
+        $this->ids = $ids;
+    }
+
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    public function setVersion($version)
+    {
+        $this->version = $version;
     }
 
     public function getFormat()
