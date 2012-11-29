@@ -23,6 +23,8 @@ class Normalizer implements NormalizerInterface
         $normalizedData[] = $call->getNonce();
         $normalizedData[] = $call->getBody();
         
+        var_dump($normalizedData);
+        
         return implode("", $normalizedData);
     }
     

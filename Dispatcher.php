@@ -109,7 +109,8 @@ class Dispatcher
     protected function call()
     {
         $this->request->setMethod($this->call->getMethod());
-        $this->request->setHost($this->call->getRequestUri());
+        $this->request->setHost($this->call->getRequestPartBase());
+        $this->request->setResource($this->call->getRequestPartUri());
         $this->request->setHeaders($this->headers->getHeaders());
         
         $this->client->setIgnoreErrors(true);

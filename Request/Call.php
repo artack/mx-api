@@ -40,7 +40,17 @@ class Call
 
     public function getRequestUri()
     {
-        return 'http' . (($this->url->getUseSSL()) ? 's' : '') . '://' . $this->url->getBaseUrl() . '/' . $this->getPath("/", true);
+        return $this->getRequestPartBase() . $this->getRequestPartUri();
+    }
+    
+    public function getRequestPartBase()
+    {
+        return 'http' . (($this->url->getUseSSL()) ? 's' : '') . '://' . $this->url->getBaseUrl();
+    }
+    
+    public function getRequestPartUri()
+    {
+        return '/' . $this->getPath("/", true);
     }
     
     public function getUrl()

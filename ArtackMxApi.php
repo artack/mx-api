@@ -70,7 +70,7 @@ class ArtackMxApi
     
     protected function dispatch()
     {
-        $this->dispatcher->dispatch($this->call);
+        return $this->dispatcher->dispatch($this->call);
     }
     
 }
