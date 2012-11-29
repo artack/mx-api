@@ -11,10 +11,11 @@ use Artack\MxApi\Headers\HeadersInterface;
 use Artack\MxApi\Normalizer\NormalizerInterface;
 use Artack\MxApi\Randomizer\RandomizerInterface;
 use Artack\MxApi\Request\Call;
-use Buzz\Client\Curl;
-use Buzz\Message\MessageInterface;
+use Artack\MxApi\Response\Response;
+use Buzz\Client\ClientInterface;
 use Buzz\Message\RequestInterface;
 use DateTime;
+use Exception;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
@@ -58,16 +59,16 @@ class Dispatcher
     protected $request;
     
     /**
-     * @var MessageInterface
+     * @var Response
      */
     protected $response;
     
     /**
-     * @var Curl
+     * @var ClientInterface
      */
-    protected $curl;
+    protected $client;
     
-    public function __construct(Configuration $configuration, RandomizerInterface $randomizer, NormalizerInterface $normalizer, HasherInterface $hasher, HeadersInterface $headers, RequestInterface $request, MessageInterface $response, Curl $curl)
+    public function __construct(Configuration $configuration, RandomizerInterface $randomizer, NormalizerInterface $normalizer, HasherInterface $hasher, HeadersInterface $headers, RequestInterface $request, Response $response, ClientInterface $client)
     {
         $this->configuration = $configuration;
         $this->randomizer = $randomizer;
@@ -76,7 +77,7 @@ class Dispatcher
         $this->headers = $headers;
         $this->request = $request;
         $this->response = $response;
-        $this->curl = $curl;
+        $this->client = $client;
     }
     
     public function dispatch(Call $call)
@@ -85,8 +86,9 @@ class Dispatcher
         
         $this->prepare();
         $this->call();
+        $this->parse();
         
-        return $this->parse();
+        return $this->return;
     }
     
     protected function prepare()
@@ -110,17 +112,22 @@ class Dispatcher
         $this->request->setHost($this->call->getRequestUri());
         $this->request->setHeaders($this->headers->getHeaders());
         
-        $this->curl->setVerifyPeer($this->configuration->getVerifyPeer());
-        $this->curl->send($this->request, $this->response);
-        
-        var_dump($this->request);
-        var_dump($this->response);
-        var_dump($this->curl);
+        $this->client->setIgnoreErrors(true);
+        $this->client->setVerifyPeer($this->configuration->getVerifyPeer());
+        $this->client->send($this->request, $this->response);
     }
     
     protected function parse()
     {
-        return 'dummy';
+        var_dump($this->request);
+        var_dump($this->response);
+        
+        if ($this->response->isForbidden())
+        {
+            throw new Exception(sprintf("API call forbidden - statuscode [%s] with message [%s]", $this->response->getStatusCode(), $this->response->getReasonPhrase()));
+        }
+        
+        $this->return = $this->response->getContent();
     }
     
 }
