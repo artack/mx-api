@@ -21,11 +21,11 @@ class Normalizer implements NormalizerInterface
         $normalizedData[] = $headers['Accept']->getHeader();
         $normalizedData[] = $headers['Accept-Language']->getHeader();
         $normalizedData[] = $call->getNonce();
-        $normalizedData[] = $call->getBody();
+        $normalizedData[] = $call->getFormattedBody();
         
-        var_dump($normalizedData);
+        $serializedData = implode("", $normalizedData);
         
-        return implode("", $normalizedData);
+        return $serializedData;
     }
     
 }

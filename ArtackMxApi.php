@@ -40,7 +40,7 @@ class ArtackMxApi
         return $this;
     }
     
-    public function setPath($path, $ids)
+    public function setPath($path, array $ids = array())
     {
         $this->call->setPath($path, $ids);
         
@@ -64,6 +64,27 @@ class ArtackMxApi
     public function post()
     {
         $this->call->setMethod('POST');
+        
+        return $this->dispatch();
+    }
+    
+    public function put()
+    {
+        $this->call->setMethod('PUT');
+        
+        return $this->dispatch();
+    }
+    
+    public function patch()
+    {
+        $this->call->setMethod('PATCH');
+        
+        return $this->dispatch();
+    }
+    
+    public function delete()
+    {
+        $this->call->setMethod('DELETE');
         
         return $this->dispatch();
     }

@@ -3,6 +3,8 @@
 namespace Artack\MxApi\Request;
 
 use Artack\MxApi\Request\Url;
+use Artack\MxApi\Util\Pluralization;
+use Exception;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
@@ -13,7 +15,7 @@ class Call
     /**
      * @var Url
      */
-    protected $url = null;
+    protected $url;
     
     protected $method = null;
     protected $path = null;
@@ -23,6 +25,7 @@ class Call
     
     protected $language = null;
     protected $body = null;
+    protected $formattedBody = null;
     
     protected $date = null;
     protected $nonce = null;
@@ -80,7 +83,15 @@ class Call
         if ($withIds) {
             $pathCount = count($this->path);
             for ($i=0; $i<$pathCount; $i++) {
-                $newPath .= $this->path[$i] . $separator . ((isset($this->ids[$i])) ? $this->ids[$i] : '') . $separator;
+                
+                $entity = $this->path[$i];
+                
+                if (!(($i+1) == $pathCount && $this->method == 'POST' && $entity == key($this->getBody()))) {
+                    $entity = Pluralization::pluralize($entity);
+                }
+                
+                $newPath .= $entity . $separator . ((isset($this->ids[$i])) ? $this->ids[$i] : '') . $separator;
+
             }
             
             return rtrim($newPath, '/');
@@ -127,6 +138,21 @@ class Call
     public function setBody($body)
     {
         $this->body = $body;
+    }
+
+    public function getFormattedBody()
+    {
+        return $this->formattedBody;
+    }
+
+    public function setFormattedBody($formattedBody)
+    {
+        if (!is_string($formattedBody))
+        {
+            throw new Exception(sprintf("Paramtere [%s] needs to be a string, [%] given", 'formattedBody', get_class($formattedBody)));
+        }
+        
+        $this->formattedBody = $formattedBody;
     }
 
     public function getDate()
