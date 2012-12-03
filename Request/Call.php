@@ -24,7 +24,7 @@ class Call
     protected $format = null;
     
     protected $language = null;
-    protected $body = null;
+    protected $body = array();
     protected $formattedBody = null;
     
     protected $date = null;

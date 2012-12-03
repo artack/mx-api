@@ -112,15 +112,15 @@ class Dispatcher
         $this->call->setDate(new DateTime());
         $this->call->setNonce($this->randomizer->getRandom(32));
         
-        $serializedBody = "";
+        if (count($this->call->getBody()))
         if (!in_array($this->call->getMethod(), array('GET')))
         {
             $serializedBody = $this->serializer->encode($this->call->getBody(), $this->call->getFormat());
+            $this->call->setFormattedBody($serializedBody);
             
             $this->headers->addHeader(new ContentTypeHeader($this->call->getPath(".", false), $this->configuration->getFormat(), $this->call->getVersion()));
         }
         
-        $this->call->setFormattedBody($serializedBody);
         
         $this->headers->addHeader(new DateHeader($this->call->getDate()));
         $this->headers->addHeader(new AcceptHeader($this->call->getPath(".", false), $this->configuration->getFormat(), $this->call->getVersion()));
@@ -147,6 +147,7 @@ class Dispatcher
         $this->client->setIgnoreErrors(true);
         $this->client->setVerifyPeer($this->configuration->getVerifyPeer());
         $this->client->setMaxRedirects(0);
+        $this->client->setTimeout(10);
         $this->client->send($this->request, $this->response);
     }
     
