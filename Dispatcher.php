@@ -153,7 +153,7 @@ class Dispatcher
     
     protected function parse()
     {
-        var_dump($this->request);
+//        var_dump($this->request);
 //        var_dump($this->response);
         
         if ($this->response->isServerError())
