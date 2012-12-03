@@ -1,8 +1,11 @@
 <?php
 
-namespace MailxpertAPI\Randomizer;
+namespace Artack\MxApi\Randomizer;
 
-class PseudoRandomizer extends Randomizer implements RandomizerInterface
+/**
+ * @author Patrick Landolt <patrick.landolt@artack.ch>
+ */
+class PseudoRandomizer implements RandomizerInterface
 {
 
     private static $charPool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
