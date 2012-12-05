@@ -78,11 +78,11 @@ class Call
 
     public function getPath($separator, $withIds)
     {
-        $newPath = "";
+        $newPath = $this->path[0] . $separator;
         
         if ($withIds) {
             $pathCount = count($this->path);
-            for ($i=0; $i<$pathCount; $i++) {
+            for ($i=1; $i<$pathCount; $i++) {
                 
                 $entity = $this->path[$i];
                 
