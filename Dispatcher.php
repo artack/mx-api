@@ -121,7 +121,6 @@ class Dispatcher
             $this->headers->addHeader(new ContentTypeHeader($this->call->getPath(".", false), $this->configuration->getFormat(), $this->call->getVersion()));
         }
         
-        
         $this->headers->addHeader(new DateHeader($this->call->getDate()));
         $this->headers->addHeader(new AcceptHeader($this->call->getPath(".", false), $this->configuration->getFormat(), $this->call->getVersion()));
         $this->headers->addHeader(new AcceptLanguageHeader($this->call->getLanguage()));

@@ -25,7 +25,8 @@ class Call
     
     protected $language = null;
     protected $body = array();
-    protected $formattedBody = null;
+    protected $settings = array();
+    protected $formattedBody = "";
     
     protected $date = null;
     protected $nonce = null;
@@ -53,7 +54,13 @@ class Call
     
     public function getRequestPartUri()
     {
-        return '/' . $this->getPath("/", true);
+        $uri = '/' . $this->getPath("/", true);
+        
+        if ($this->method == 'GET' && count($this->settings)) {
+            $uri .= '?' . http_build_query(array('settings' => $this->settings));
+        }
+        
+        return rtrim($uri, '&');
     }
     
     public function getUrl()
@@ -84,13 +91,16 @@ class Call
             $pathCount = count($this->path);
             for ($i=1; $i<$pathCount; $i++) {
                 
+                $next = $i+1;
+                $prev = $i-1;
+                
                 $entity = $this->path[$i];
                 
-                if (!(($i+1) == $pathCount && $this->method == 'POST' && $entity == key($this->getBody()))) {
+                if (!(($next) == $pathCount && $this->method == 'POST' && $entity == key($this->getBody()))) {
                     $entity = Pluralization::pluralize($entity);
                 }
                 
-                $newPath .= $entity . $separator . ((isset($this->ids[$i])) ? $this->ids[$i] : '') . $separator;
+                $newPath .= $entity . $separator . ((isset($this->ids[$prev])) ? $this->ids[$prev] : '') . $separator;
 
             }
             
@@ -108,6 +118,22 @@ class Call
     {
         $this->path = explode("/", strtolower($path));
         $this->ids = $ids;
+    }
+    
+    /**
+     * @param array $settings
+     */
+    public function setSettings(array $settings)
+    {
+        $this->settings = $settings;
+    }
+    
+    /**
+     * @return array
+     */
+    public function getSettings()
+    {
+        return $this->settings;
     }
 
     public function getVersion()
