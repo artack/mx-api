@@ -23,6 +23,8 @@ class Call
     protected $version = null;
     protected $format = null;
     
+    protected $pluralization = true;
+    
     protected $language = null;
     protected $body = array();
     protected $settings = array();
@@ -96,7 +98,7 @@ class Call
                 
                 $entity = $this->path[$i];
                 
-                if (!(($next) == $pathCount && $this->method == 'POST' && $entity == key($this->getBody()))) {
+                if (!(($next) == $pathCount && $this->method == 'POST' && $entity == key($this->getBody())) && $this->pluralization) {
                     $entity = Pluralization::pluralize($entity);
                 }
                 
@@ -118,6 +120,22 @@ class Call
     {
         $this->path = explode("/", strtolower($path));
         $this->ids = $ids;
+    }
+    
+    /**
+     * @param boolean $pluralization
+     */
+    public function setPluralization($pluralization)
+    {
+        $this->pluralization = $pluralization;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function getPluralization()
+    {
+        return $this->pluralization;
     }
     
     /**

@@ -54,6 +54,13 @@ class ArtackMxApi
         return $this;
     }
     
+    public function setPluralization($pluralization)
+    {
+        $this->call->setPluralization($pluralization);
+        
+        return $this;
+    }
+    
     public function setBody($body)
     {
         $this->call->setBody($body);
