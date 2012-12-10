@@ -157,7 +157,7 @@ class Dispatcher
         
         if ($this->response->isServerError())
         {
-            throw new Exception(sprintf("API server error - statuscode [%s] with message [%s]", $this->response->getStatusCode(), $this->response->getReasonPhrase()));
+            throw new Exception(sprintf("API server error - statuscode [%s] with message [%s] / [%s]", $this->response->getStatusCode(), $this->response->getReasonPhrase(), $this->response->getContent()));
         }
         
         if ($this->response->isForbidden())
@@ -173,4 +173,20 @@ class Dispatcher
         $this->apiResponse = new ApiResponse($this->response->getStatusCode(), $this->response->getReasonPhrase(), $this->response->getHeadersArray(), $deSerializedBody);
     }
     
+    /**
+     * @param Configuration $configuration
+     */
+    public function setConfiguration(Configuration $configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
+     * @return Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
 }
