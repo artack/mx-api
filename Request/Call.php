@@ -96,13 +96,14 @@ class Call
                 $next = $i+1;
                 $prev = $i-1;
                 
-                $entity = $this->path[$i];
+                $entity = $this->path[$i];                
                 
-                if (!(($next) == $pathCount && $this->method == 'POST' && $entity == key($this->getBody())) && $this->pluralization) {
+                if ($next == $pathCount && !($this->method == 'POST' && $entity == key($this->getBody())) && $this->pluralization) {
+                    
                     $entity = Pluralization::pluralize($entity);
                 }
                 
-                $newPath .= $entity . $separator . ((isset($this->ids[$prev])) ? $this->ids[$prev] : '') . $separator;
+                $newPath .= $entity . $separator . ( isset($this->ids[$prev]) ? ($this->ids[$prev] . $separator) : '' ) ;
 
             }
             

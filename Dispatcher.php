@@ -146,7 +146,8 @@ class Dispatcher
         $this->client->setIgnoreErrors(true);
         $this->client->setVerifyPeer($this->configuration->getVerifyPeer());
         $this->client->setMaxRedirects(0);
-        $this->client->setTimeout(10);
+        $this->client->setTimeout(60);
+        
         $this->client->send($this->request, $this->response);
     }
     
@@ -164,10 +165,15 @@ class Dispatcher
         {
             throw new Exception(sprintf("API call forbidden - statuscode [%s] with message [%s]", $this->response->getStatusCode(), $this->response->getReasonPhrase()));
         }
-        
+              
         $deSerializedBody = "";
         if ($this->response->getContent()) {
             $deSerializedBody = $this->serializer->decode($this->response->getContent(), $this->call->getFormat());
+        }
+        
+        if(null === $deSerializedBody)
+        {
+            throw new \Exception($this->response->getContent());
         }
         
         $this->apiResponse = new ApiResponse($this->response->getStatusCode(), $this->response->getReasonPhrase(), $this->response->getHeadersArray(), $deSerializedBody);
