@@ -112,12 +112,11 @@ class Dispatcher
         $this->call->setDate(new DateTime());
         $this->call->setNonce($this->randomizer->getRandom(32));
         
-        if (count($this->call->getBody()))
-        if (!in_array($this->call->getMethod(), array('GET')))
+        if (!in_array($this->call->getMethod(), array('GET')) && count($this->call->getBody()))
         {
             $serializedBody = $this->serializer->encode($this->call->getBody(), $this->call->getFormat());
             $this->call->setFormattedBody($serializedBody);
-            
+;            
             $this->headers->addHeader(new ContentTypeHeader($this->call->getPath(".", false), $this->configuration->getFormat(), $this->call->getVersion()));
         }
         
@@ -173,10 +172,17 @@ class Dispatcher
         
         if(null === $deSerializedBody)
         {
-            throw new \Exception($this->response->getContent());
+            echo $this->response->getContent();
+            throw new \Exception("API response could not deserialize");
         }
         
         $this->apiResponse = new ApiResponse($this->response->getStatusCode(), $this->response->getReasonPhrase(), $this->response->getHeadersArray(), $deSerializedBody);
+        
+        
+        if(isset($deSerializedBody['status']) && $deSerializedBody['status']!= 'success')
+        {
+             throw new Exception(sprintf("API call error - statuscode [%s] with message [%s] / [%s]", $deSerializedBody['code'], $deSerializedBody['text'], $this->response->getContent()));
+        }
     }
     
     /**
