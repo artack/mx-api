@@ -23,9 +23,12 @@ class Call
     protected $version = null;
     protected $format = null;
     
+    protected $pluralization = true;
+    
     protected $language = null;
     protected $body = array();
-    protected $formattedBody = null;
+    protected $settings = array();
+    protected $formattedBody = "";
     
     protected $date = null;
     protected $nonce = null;
@@ -53,7 +56,13 @@ class Call
     
     public function getRequestPartUri()
     {
-        return '/' . $this->getPath("/", true);
+        $uri = '/' . $this->getPath("/", true);
+        
+        if ($this->method == 'GET' && count($this->settings)) {
+            $uri .= '?' . http_build_query(array('settings' => $this->settings));
+        }
+        
+        return rtrim($uri, '&');
     }
     
     public function getUrl()
@@ -78,20 +87,21 @@ class Call
 
     public function getPath($separator, $withIds)
     {
-        $newPath = "";
+        $newPath = $this->path[0] . $separator;
         
         if ($withIds) {
             $pathCount = count($this->path);
-            for ($i=0; $i<$pathCount; $i++) {
+            for ($i=1; $i<$pathCount; $i++) {
                 
-                $entity = $this->path[$i];
+                $prev = $i-1;
                 
-                if (!(($i+1) == $pathCount && $this->method == 'POST' && $entity == key($this->getBody()))) {
+                $entity = $this->path[$i];                
+                
+                if (isset($this->ids[$prev]) && !($this->method == 'POST' && $entity == key($this->getBody())) && $this->pluralization) {
                     $entity = Pluralization::pluralize($entity);
                 }
                 
-                $newPath .= $entity . $separator . ((isset($this->ids[$i])) ? $this->ids[$i] : '') . $separator;
-
+                $newPath .= $entity . $separator . ( isset($this->ids[$prev]) ? ($this->ids[$prev] . $separator) : '' ) ;
             }
             
             return rtrim($newPath, '/');
@@ -108,6 +118,38 @@ class Call
     {
         $this->path = explode("/", strtolower($path));
         $this->ids = $ids;
+    }
+    
+    /**
+     * @param boolean $pluralization
+     */
+    public function setPluralization($pluralization)
+    {
+        $this->pluralization = $pluralization;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function getPluralization()
+    {
+        return $this->pluralization;
+    }
+    
+    /**
+     * @param array $settings
+     */
+    public function setSettings(array $settings)
+    {
+        $this->settings = $settings;
+    }
+    
+    /**
+     * @return array
+     */
+    public function getSettings()
+    {
+        return $this->settings;
     }
 
     public function getVersion()

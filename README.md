@@ -1,7 +1,7 @@
 ARTACK/mx-api
 =============
 
-This library is currently a part of the mailXpert Symfony2 SDK togehter with the [Syfmony2 Bundle](https://github.com/ARTACK/mx-api-bundle).
+This library is currently a part of the mailXpert Symfony2 SDK togehter with the [Symfony2 Bundle](https://github.com/ARTACK/mx-api-bundle).
 
 Nevertheless this library can be used for any PHP 5.3 project. A FactoryBuilder for easier usage will follow.
 

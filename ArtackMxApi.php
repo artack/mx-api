@@ -40,9 +40,23 @@ class ArtackMxApi
         return $this;
     }
     
+    public function setSettings(array $settings = array())
+    {
+        $this->call->setSettings($settings);
+        
+        return $this;
+    }
+    
     public function setPath($path, array $ids = array())
     {
         $this->call->setPath($path, $ids);
+        
+        return $this;
+    }
+    
+    public function setPluralization($pluralization)
+    {
+        $this->call->setPluralization($pluralization);
         
         return $this;
     }

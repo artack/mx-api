@@ -75,5 +75,20 @@ class Configuration
     {
         return $this->defaultLanguage;
     }
+    
+    public function setCustomerKey($customerKey)
+    {
+        $this->customerKey = $customerKey;
+    }
+
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = $apiKey;
+    }
+
+    public function setApiSecret($apiSecret)
+    {
+        $this->apiSecret = $apiSecret;
+    }
 
 }

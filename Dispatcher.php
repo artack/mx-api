@@ -112,15 +112,13 @@ class Dispatcher
         $this->call->setDate(new DateTime());
         $this->call->setNonce($this->randomizer->getRandom(32));
         
-        if (count($this->call->getBody()))
-        if (!in_array($this->call->getMethod(), array('GET')))
+        if (!in_array($this->call->getMethod(), array('GET')) && count($this->call->getBody()))
         {
             $serializedBody = $this->serializer->encode($this->call->getBody(), $this->call->getFormat());
             $this->call->setFormattedBody($serializedBody);
-            
+;            
             $this->headers->addHeader(new ContentTypeHeader($this->call->getPath(".", false), $this->configuration->getFormat(), $this->call->getVersion()));
         }
-        
         
         $this->headers->addHeader(new DateHeader($this->call->getDate()));
         $this->headers->addHeader(new AcceptHeader($this->call->getPath(".", false), $this->configuration->getFormat(), $this->call->getVersion()));
@@ -147,7 +145,8 @@ class Dispatcher
         $this->client->setIgnoreErrors(true);
         $this->client->setVerifyPeer($this->configuration->getVerifyPeer());
         $this->client->setMaxRedirects(0);
-        $this->client->setTimeout(10);
+        $this->client->setTimeout(60);
+        
         $this->client->send($this->request, $this->response);
     }
     
@@ -158,20 +157,48 @@ class Dispatcher
         
         if ($this->response->isServerError())
         {
-            throw new Exception(sprintf("API server error - statuscode [%s] with message [%s]", $this->response->getStatusCode(), $this->response->getReasonPhrase()));
+            throw new Exception(sprintf("API server error - statuscode [%s] with message [%s] / [%s]", $this->response->getStatusCode(), $this->response->getReasonPhrase(), $this->response->getContent()));
         }
         
         if ($this->response->isForbidden())
         {
             throw new Exception(sprintf("API call forbidden - statuscode [%s] with message [%s]", $this->response->getStatusCode(), $this->response->getReasonPhrase()));
         }
-        
+              
         $deSerializedBody = "";
         if ($this->response->getContent()) {
             $deSerializedBody = $this->serializer->decode($this->response->getContent(), $this->call->getFormat());
         }
         
+        if(null === $deSerializedBody)
+        {
+            echo $this->response->getContent();
+            throw new \Exception("API response could not deserialize");
+        }
+        
         $this->apiResponse = new ApiResponse($this->response->getStatusCode(), $this->response->getReasonPhrase(), $this->response->getHeadersArray(), $deSerializedBody);
+        
+        
+        if(isset($deSerializedBody['status']) && $deSerializedBody['status']!= 'success')
+        {
+             throw new Exception(sprintf("API call error - statuscode [%s] with message [%s] / [%s]", $deSerializedBody['code'], $deSerializedBody['text'], $this->response->getContent()));
+        }
     }
     
+    /**
+     * @param Configuration $configuration
+     */
+    public function setConfiguration(Configuration $configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
+     * @return Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
 }
