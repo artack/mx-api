@@ -7,12 +7,12 @@ namespace Artack\MxApi\Response;
  */
 class ApiResponse implements ApiResponseInterface
 {
-    
+
     protected $statusCode;
     protected $statusMessage;
     protected $headers = array();
     protected $content;
-    
+
     function __construct($statusCode, $statusMessage, array $headers, $content)
     {
         $this->statusCode = $statusCode;
@@ -20,7 +20,7 @@ class ApiResponse implements ApiResponseInterface
         $this->headers = $headers;
         $this->content = $content;
     }
-    
+
     public function getStatusCode()
     {
         return $this->statusCode;
@@ -39,6 +39,16 @@ class ApiResponse implements ApiResponseInterface
     public function getContent()
     {
         return $this->content;
+    }
+
+    public function getData()
+    {
+        if (!isset($this->content['data']))
+        {
+            return false;
+        }
+
+        return $this->content['data'];
     }
 
 }
