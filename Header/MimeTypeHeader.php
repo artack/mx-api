@@ -19,8 +19,6 @@ abstract class MimeTypeHeader implements HeaderInterface
         $this->format = $format;
         $this->version = $version;
     }
-
-    abstract public function getName();
     
     public function getHeader()
     {
