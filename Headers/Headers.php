@@ -10,25 +10,30 @@ use Artack\MxApi\Header\HeaderInterface;
  */
 class Headers implements HeadersInterface, ArrayAccess
 {
-    
+
     public $headers = array();
-    
+
     public function addHeader(HeaderInterface $header)
     {
         $this->headers[$header->getName()] = $header;
     }
-    
+
     public function getHeaders()
     {
         $headers = array();
-        
+
         foreach ($this->headers as /* @var $header HeaderInterface */ $header) {
             $headers[$header->getName()] = $header->getHeader();
         }
-        
+
         return $headers;
     }
-    
+
+    public function clearHeaders()
+    {
+        $this->headers = array();
+    }
+
     public function offsetExists($offset)
     {
         return isset($this->headers[$offset]);
@@ -52,5 +57,5 @@ class Headers implements HeadersInterface, ArrayAccess
     {
         unset($this->headers[$offset]);
     }
-    
+
 }

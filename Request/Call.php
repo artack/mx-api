@@ -11,28 +11,34 @@ use Exception;
  */
 class Call
 {
-    
+
     /**
      * @var Url
      */
     protected $url;
-    
+
     protected $method = null;
     protected $path = null;
     protected $ids = null;
     protected $version = null;
     protected $format = null;
-    
+
     protected $pluralization = true;
-    
+
     protected $language = null;
     protected $body = array();
     protected $settings = array();
     protected $formattedBody = "";
-    
+
     protected $date = null;
     protected $nonce = null;
-    
+
+    protected $methodsWithBody = array(
+        'POST',
+        'PUT',
+        'PATCH'
+    );
+
     /**
      * @param Url $url
      */
@@ -44,27 +50,39 @@ class Call
         $this->language = $language;
     }
 
+    public function reset()
+    {
+        $this->path = null;
+        $this->method = null;
+        $this->ids = null;
+        $this->body = array();
+        $this->settings = array();
+        $this->formattedBody = "";
+        $this->date = null;
+        $this->nonce = null;
+    }
+
     public function getRequestUri()
     {
         return $this->getRequestPartBase() . $this->getRequestPartUri();
     }
-    
+
     public function getRequestPartBase()
     {
         return 'http' . (($this->url->getUseSSL()) ? 's' : '') . '://' . $this->url->getBaseUrl();
     }
-    
+
     public function getRequestPartUri()
     {
         $uri = '/' . $this->getPath("/", true);
-        
-        if ($this->method == 'GET' && count($this->settings)) {
+
+        if (!in_array($this->method, $this->methodsWithBody) && count($this->settings)) {
             $uri .= '?' . http_build_query(array('settings' => $this->settings));
         }
-        
+
         return rtrim($uri, '&');
     }
-    
+
     public function getUrl()
     {
         return $this->url;
@@ -88,22 +106,22 @@ class Call
     public function getPath($separator, $withIds)
     {
         $newPath = $this->path[0] . $separator;
-        
+
         if ($withIds) {
             $pathCount = count($this->path);
             for ($i=1; $i<$pathCount; $i++) {
-                
+
                 $prev = $i-1;
-                
-                $entity = $this->path[$i];                
-                
+
+                $entity = $this->path[$i];
+
                 if (isset($this->ids[$prev]) && !($this->method == 'POST' && $entity == key($this->getBody())) && $this->pluralization) {
                     $entity = Pluralization::pluralize($entity);
                 }
-                
+
                 $newPath .= $entity . $separator . ( isset($this->ids[$prev]) ? ($this->ids[$prev] . $separator) : '' ) ;
             }
-            
+
             return rtrim($newPath, '/');
         } else {
             return implode($separator, $this->path);
@@ -119,7 +137,7 @@ class Call
         $this->path = explode("/", strtolower($path));
         $this->ids = $ids;
     }
-    
+
     /**
      * @param boolean $pluralization
      */
@@ -127,7 +145,7 @@ class Call
     {
         $this->pluralization = $pluralization;
     }
-    
+
     /**
      * @return boolean
      */
@@ -135,7 +153,7 @@ class Call
     {
         return $this->pluralization;
     }
-    
+
     /**
      * @param array $settings
      */
@@ -143,7 +161,7 @@ class Call
     {
         $this->settings = $settings;
     }
-    
+
     /**
      * @return array
      */
@@ -174,7 +192,14 @@ class Call
 
     public function getBody()
     {
-        return $this->body;
+        if (in_array($this->method, $this->methodsWithBody) && count($this->settings))
+        {
+            return array_merge($this->body, array('settings' => $this->settings));
+        }
+        else
+        {
+            return $this->body;
+        }
     }
 
     public function setBody($body)
@@ -193,7 +218,7 @@ class Call
         {
             throw new Exception(sprintf("Paramtere [%s] needs to be a string, [%] given", 'formattedBody', get_class($formattedBody)));
         }
-        
+
         $this->formattedBody = $formattedBody;
     }
 
@@ -225,6 +250,16 @@ class Call
     public function setLanguage($language)
     {
         $this->language = $language;
+    }
+
+    public function getMethodsWithBody()
+    {
+        return $this->methodsWithBody;
+    }
+
+    public function methodHasBody()
+    {
+        return (in_array($this->method, $this->methodsWithBody)) ? true : false;
     }
 
 }

@@ -41,6 +41,11 @@ class ApiResponse implements ApiResponseInterface
         return $this->content;
     }
 
+    public function getLocation()
+    {
+        return (isset($this->headers['location'])) ? $this->headers['location'] : "";
+    }
+
     public function getData()
     {
         if (!isset($this->content['data']))

@@ -9,5 +9,6 @@ interface HeadersInterface
 {
 
     public function getHeaders();
+    public function clearHeaders();
 
 }
