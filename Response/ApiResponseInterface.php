@@ -10,9 +10,8 @@ interface ApiResponseInterface
 
     public function getStatusCode();
     public function getStatusMessage();
-    
     public function getHeaders();
-    
     public function getContent();
-    
+    public function getData();
+
 }
