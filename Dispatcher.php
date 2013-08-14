@@ -152,7 +152,7 @@ class Dispatcher
         $this->client->setIgnoreErrors(true);
         $this->client->setVerifyPeer($this->configuration->getVerifyPeer());
         $this->client->setMaxRedirects(0);
-        $this->client->setTimeout(60);
+        $this->client->setTimeout($this->configuration->getTimeout());
 
         $this->client->send($this->request, $this->response);
     }
